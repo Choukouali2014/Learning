@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { VideosComponent, NgbdModalContent } from './videos/videos.component';
+import { HttpClientModule } from '@angular/common/http';
+import { VideosService } from './videos.service';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -13,16 +16,18 @@ import { VideosComponent, NgbdModalContent } from './videos/videos.component';
     HeaderComponent,
     FooterComponent,
     VideosComponent,
-    NgbdModalContent
+    NgbdModalContent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     NgbModule
     
   ],
   entryComponents: [NgbdModalContent],
-  providers: [],
+  providers: [VideosService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { NgbSlideEvent, NgbCarousel, NgbModal, NgbSlideEventSource, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {  NgbModal,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { VideosService } from '../videos.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'ngbd-modal-content',
@@ -36,65 +37,63 @@ export class NgbdModalContent {
   styleUrls: ['./videos.component.scss']
 })
 export class VideosComponent implements OnInit {
- 
-  constructor(private modalService: NgbModal, private sanitizer: DomSanitizer) { }
-  videos = {
-    "topicRecord": [
-        {
-            "key": "week1",
-            "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week1.mp4"
-        },
-        {
-            "key": "week2",
-            "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week2.mp4"
-        },
-        {
-            "key": "week3",
-            "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week3.mp4"
-        },
-        {
-            "key": "week4",
-            "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week4.mp4"
-        }
-    ]
-}
+  values:any[];
+  videosV: any = [];
+  imagesView;
+  constructor(private modalService: NgbModal,private route: ActivatedRoute,private sanitizer: DomSanitizer, private videoService: VideosService) { }
+//   videos = {
+//     "topicRecord": [
+//         {
+//             "key": "week1",
+//             "url": "https://api.zoom.us/recording/share/VHEJZAfHj8MlNP7uBFcHwUQj6Lyrqzmi45eebEa9m_2wIumekTziMw"
+//         },
+//         {
+//             "key": "week2",
+//             "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week2.mp4"
+//         },
+//         {
+//             "key": "week3",
+//             "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week3.mp4"
+//         },
+//         {
+//             "key": "week4",
+//             "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week4.mp4"
+//         }
+//     ]
+// }
   ngOnInit() {
+    this.values = this.load();
   }
 
-  images = [1, 2, 3, 4, 5, 6, 7].map(() => `https://picsum.photos/1349/500?random&t=${Math.random()}`);
-  imagesView = this.videos['topicRecord'].map(() => `https://picsum.photos/350/150?random&t=${Math.random()}`);
-  paused = false;
-  unpauseOnArrow = false;
-  pauseOnIndicator = false;
-  pauseOnHover = true;
-
-  @ViewChild('carousel', { static: true }) carousel: NgbCarousel;
-
-  togglePaused() {
-    if (this.paused) {
-      this.carousel.cycle();
-    } else {
-      this.carousel.pause();
-    }
-    this.paused = !this.paused;
-  }
+ // imagesView = [1, 2, 3, 4, 5, 6, 7,8,9].map(() => `https://picsum.photos/350/150?random&t=${Math.random()}`);  
   openXl(content) {
-    
-    for(let item of this.videos.topicRecord){
-        if(content == item.key){
-          const modalRef = this.modalService.open(NgbdModalContent, {size: "lg", keyboard: false, centered: true});
-         modalRef.componentInstance.name =this.sanitizer.bypassSecurityTrustResourceUrl(item.url);
+    const modalRef = this.modalService.open(NgbdModalContent, {size: "lg", keyboard: false, centered: true});
+    modalRef.componentInstance.name =this.sanitizer.bypassSecurityTrustResourceUrl(content);
+   
+    // for(let item of this.videosV[0]){
+    //     if(content === item.start_time){
+    //       const modalRef = this.modalService.open(NgbdModalContent, {size: "lg", keyboard: false, centered: true});
+    //      modalRef.componentInstance.name =this.sanitizer.bypassSecurityTrustResourceUrl(item.share_url);
+    //     }
+    // }
+  }
+
+  load(){
+    let term = this.route.snapshot.paramMap.get('id');
+    this.imagesView = `../../assets/images/${term}.png`
+    let data =[];
+      this.videoService.getVideos().pipe(
+  
+      ).subscribe( x =>{
+        for(let i =0; i<x.length;i++){
+          if(x[i].topic.toLowerCase().indexOf(term) !== -1){
+            data.push(x[i]);
+          } 
         }
+      }
+      );
+      return data;
     }
-  }
-  onSlide(slideEvent: NgbSlideEvent) {
-    if (this.unpauseOnArrow && slideEvent.paused &&
-      (slideEvent.source === NgbSlideEventSource.ARROW_LEFT || slideEvent.source === NgbSlideEventSource.ARROW_RIGHT)) {
-      this.togglePaused();
-    }
-    if (this.pauseOnIndicator && !slideEvent.paused && slideEvent.source === NgbSlideEventSource.INDICATOR) {
-      this.togglePaused();
-    }
-  }
+ 
 
 }
