@@ -3,7 +3,7 @@ import {  NgbModal,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { VideosService } from '../videos.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'ngbd-modal-content',
   template: `
@@ -38,62 +38,30 @@ export class NgbdModalContent {
 })
 export class VideosComponent implements OnInit {
   values:any[];
-  videosV: any = [];
+  videosV;
   imagesView;
   constructor(private modalService: NgbModal,private route: ActivatedRoute,private sanitizer: DomSanitizer, private videoService: VideosService) { }
-//   videos = {
-//     "topicRecord": [
-//         {
-//             "key": "week1",
-//             "url": "https://api.zoom.us/recording/share/VHEJZAfHj8MlNP7uBFcHwUQj6Lyrqzmi45eebEa9m_2wIumekTziMw"
-//         },
-//         {
-//             "key": "week2",
-//             "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week2.mp4"
-//         },
-//         {
-//             "key": "week3",
-//             "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week3.mp4"
-//         },
-//         {
-//             "key": "week4",
-//             "url": "https://camertech.s3.us-east-2.amazonaws.com/topic-week4.mp4"
-//         }
-//     ]
-// }
+
   ngOnInit() {
-    this.values = this.load();
-  }
-
- // imagesView = [1, 2, 3, 4, 5, 6, 7,8,9].map(() => `https://picsum.photos/350/150?random&t=${Math.random()}`);  
-  openXl(content) {
-    const modalRef = this.modalService.open(NgbdModalContent, {size: "lg", keyboard: false, centered: true});
-    modalRef.componentInstance.name =this.sanitizer.bypassSecurityTrustResourceUrl(content);
-   
-    // for(let item of this.videosV[0]){
-    //     if(content === item.start_time){
-    //       const modalRef = this.modalService.open(NgbdModalContent, {size: "lg", keyboard: false, centered: true});
-    //      modalRef.componentInstance.name =this.sanitizer.bypassSecurityTrustResourceUrl(item.share_url);
-    //     }
-    // }
-  }
-
-  load(){
     let term = this.route.snapshot.paramMap.get('id');
-    this.imagesView = `../../assets/images/${term}.png`
-    let data =[];
-      this.videoService.getVideos().pipe(
-  
-      ).subscribe( x =>{
-        for(let i =0; i<x.length;i++){
-          if(x[i].topic.toLowerCase().indexOf(term) !== -1){
-            data.push(x[i]);
-          } 
-        }
+    this.imagesView = `../../assets/images/${term}.png`;
+    this.videoService.getVideos().pipe(
+        map(list => list.filter(lists => lists.topic.toLowerCase().indexOf(term) !== -1)),
+        map( mapValue => mapValue.map(allValue => this.videosV={
+          topic: allValue.topic,
+          share_url:allValue.share_url,
+          start_time: allValue.start_time.substring(0,10)
+        }))
+      ).subscribe(
+      data => {
+        this.values = data
       }
-      );
-      return data;
-    }
- 
+    );
+    
+  }
 
+ openXl(content) {
+    const modalRef = this.modalService.open(NgbdModalContent, {size: "lg", keyboard: false, centered: true});
+    modalRef.componentInstance.name =this.sanitizer.bypassSecurityTrustResourceUrl(content); 
+  }
 }
