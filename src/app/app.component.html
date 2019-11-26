@@ -1,22 +1,25 @@
+<app-header></app-header>
 <main role="main">
-  <app-header></app-header>
-  <ngb-carousel #carousel interval="10000" [pauseOnHover]="pauseOnHover" (slide)="onSlide($event)">
-    <ng-template ngbSlide *ngFor="let img of images; index as i">
-        <div class="carousel-caption">
-            <h3>My slide {{i + 1}} title</h3>
-        </div>
-        <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer">
-            <div class="picsum-img-wrapper">
-                <img [src]="img" alt="My image {{i + 1}} description">
-            </div>
-        </a>
-    </ng-template>
-</ngb-carousel>
-    <router-outlet>
-    
-    </router-outlet>
+  <div class="album py-5 bg-light">
+    <div *ngIf="user">
+      <ngb-carousel  #carousel interval="10000" [pauseOnHover]="pauseOnHover" (slide)="onSlide($event)">
+          <ng-template ngbSlide *ngFor="let img of images; index as i">
+              <div class="carousel-caption">
+              </div>
+              <a href="#" target="_blank" rel="nofollow noopener noreferrer">
+                  <div class="picsum-img-wrapper">
+                      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="My image {{i + 1}} description">
+                  </div>
+              </a>
+          </ng-template>
+        </ngb-carousel>
+    </div>
+      <router-outlet>
+      </router-outlet>
+  </div>
+  
 
-  <app-footer></app-footer>
+
 </main>
-
+<app-footer></app-footer>
 

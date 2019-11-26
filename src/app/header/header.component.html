@@ -9,11 +9,9 @@
           <li class="nav-item active">
             <a class="nav-link" routerLink="/home">Home <span class="sr-only">(current)</span></a>
           </li>
+         
           <li class="nav-item">
-            <a class="nav-link" routerLink="/detail/aws">AWS</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/detail/java">JAVA</a>
+            <a class="nav-link" style="cursor: pointer;" (click)="auth.signOut()">Logout</a>
           </li>
          
         </ul>

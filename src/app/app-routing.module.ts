@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { VideosComponent } from './videos/videos.component';
-import { HomeComponent } from './home/home.component';
+import { UserGuard } from './core/user.guard';
+import { AuthGuard } from './core/auth.guard';
 
 
 const routes: Routes = [
-  {path:'',pathMatch:'full', redirectTo:'/home'},
-  { path:'home', component:HomeComponent},
-  { path: 'detail/:id', component: VideosComponent },
+  { path:'home', component:VideosComponent,canActivate: [AuthGuard]},
+  { path: 'auth',  loadChildren: './core/auth/auth.module#AuthModule', canActivate: [UserGuard]},
+  { path: '', redirectTo: '/auth', pathMatch: 'full'}
+
 ];
 
 @NgModule({

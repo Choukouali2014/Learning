@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title text-center">Thank You for Registering</h1>
+        <div class="card-text" *ngIf="email">
+          <p class="text-center">We have sent a confirmation email to <strong>{{email}}</strong>.</p>
+          <p class="text-center">Please check your email and click on the link to verfiy your email address.</p>
+        </div>
+        <!-- Calling SendVerificationMail() method using authService Api -->
+        <!-- <div class="formGroup">
+            <button type="button" class="btn btnPrimary" (click)="auth.sendVerificationEmail()">
+              Resend Verification Email
+            </button>
+          </div> -->
+
+        <div  class="card-text">
+          <span>Go back to?<span> <a type="buttom" class="btn btn-primary" routerLink="/auth"> Sign in</a>
+          </span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

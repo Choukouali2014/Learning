@@ -1,19 +1,36 @@
 
-<div class="container makerting">
 
-    <div class="row">
-        <div class="col-lg-4"  *ngFor="let item of values;index as j">
-            <img class="bd-placeholder-img" (click)="openXl(item.share_url)" style="cursor: pointer" 
-            data-toggle="tooltip" data-html="true" title="Click to watch this {{item.topic }} video "
-            width="350" height="150"  [src]="imagesView" alt="">
-            <img src="../../assets/images/play.gif" (click)="openXl(item.share_url)"  style="cursor: pointer" width="100px" height="100px" class="play" alt="">
+  <div class="sk-circle" *ngIf="showSpinner else data">
+    <div class="sk-circle1 sk-child"></div>
+    <div class="sk-circle2 sk-child"></div>
+    <div class="sk-circle3 sk-child"></div>
+    <div class="sk-circle4 sk-child"></div>
+    <div class="sk-circle5 sk-child"></div>
+    <div class="sk-circle6 sk-child"></div>
+    <div class="sk-circle7 sk-child"></div>
+    <div class="sk-circle8 sk-child"></div>
+    <div class="sk-circle9 sk-child"></div>
+    <div class="sk-circle10 sk-child"></div>
+    <div class="sk-circle11 sk-child"></div>
+    <div class="sk-circle12 sk-child"></div>
+  </div>
+  <ng-template #data> 
+    <div class="container makerting" >
+        <div class="row">
+            <div class="col-lg-4"  *ngFor="let item of values;index as j">
+                <img class="bd-placeholder-img" (click)="openXl(item.share_url)" style="cursor: pointer" 
+                data-toggle="tooltip" data-html="true" title="Click to watch this {{item.topic }} video "
+                width="350" height="150"  src="../../assets/images/{{ term }}.png" alt="">
+                <img src="../../assets/images/play.gif" (click)="openXl(item.share_url)"  style="cursor: pointer" width="100px" height="100px" class="play" alt="">
+                
+                <h2 (click)="openXl(item.share_url)"  style="cursor: pointer">{{ item.topic }} - {{ item.start_time | date:'fullDate' }}</h2>
+                <!-- <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
+                    vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
+                    cursus magna.</p>
+                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
+            </div><!-- /.col-lg-4 -->
             
-            <h2 (click)="openXl(item.share_url)"  style="cursor: pointer">{{ item.topic }} - {{ item.start_time | date:'fullDate' }}</h2>
-            <!-- <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
-                vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-                cursus magna.</p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
-        </div><!-- /.col-lg-4 -->
-        
+        </div>
     </div>
-</div>
+  </ng-template>
+

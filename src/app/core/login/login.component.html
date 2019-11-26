@@ -1,0 +1,49 @@
+       
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+                    <div class="card-img-left d-none d-md-flex">
+                            <!-- Background image for card set in CSS! -->
+                    </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Sign In</h5>
+                    <div class="alert alert-danger" role="alert" *ngIf="errors">
+                            {{ errors}}
+                    </div>
+                    <form class="form-signin" [formGroup]="signIn">
+                        
+                        <label for="inputEmail">Email address</label>
+                        <div class="form-group" [ngClass]="{'has-error' : formErrors.email }">
+                            <input type="email" id="inputEmail" class="form-control" formControlName="email"
+                                placeholder="Email address" (blur)="ShowErrors()">
+                            <span class="form-text   alert-danger" *ngIf="formErrors.email">
+                                {{formErrors.email }}
+                            </span>
+                        </div>
+                        <label for="inputPassword">Password</label>
+                        <div class="form-group" [ngClass]="{'has-error' : formErrors.password }">
+                            <input type="password" id="inputPassword" formControlName="password"
+                                class="form-control" (blur)="ShowErrors()">
+                            <span class="form-text   alert-danger" *ngIf="formErrors.password">
+                                {{ formErrors.password }}
+                            </span>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase"
+                            [disabled]="!signIn.valid  || !signIn.touched " (click)="onSubmit()"
+                            type="submit">Sign
+                            in <img src="../../../assets/images/loading.gif" *ngIf="message" alt=""
+                                style="width: 20px;">
+                        </button>
+                        <button class="btn btn-lg btn-dark btn-block text-uppercase" (click)="register()"
+                            type="submit">Register
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

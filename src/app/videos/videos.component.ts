@@ -4,6 +4,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { VideosService } from '../videos.service';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { AuthService } from '../core/auth.service';
+
 @Component({
   selector: 'ngbd-modal-content',
   template: `
@@ -40,13 +42,22 @@ export class VideosComponent implements OnInit {
   values:any[];
   videosV;
   imagesView;
-  constructor(private modalService: NgbModal,private route: ActivatedRoute,private sanitizer: DomSanitizer, private videoService: VideosService) { }
+  showSpinner: boolean = true;
+  term='';
+  constructor(private auth: AuthService,private modalService: NgbModal,private route: ActivatedRoute,private sanitizer: DomSanitizer, private videoService: VideosService) {
+    this.auth.user.subscribe(
+      userData => {
+        if(!!userData){
+          this.term = userData['course'];
+        }
+      }
+    );
+   }
 
   ngOnInit() {
-    let term = this.route.snapshot.paramMap.get('id');
-    this.imagesView = `../../assets/images/${term}.png`;
+    //let term = this.route.snapshot.paramMap.get('id');
     this.videoService.getVideos().pipe(
-        map(list => list.filter(lists => lists.topic.toLowerCase().indexOf(term) !== -1)),
+        map(list => list.filter(lists => lists.topic.toLowerCase().indexOf(this.term) !== -1)),
         map( mapValue => mapValue.map(allValue => this.videosV={
           topic: allValue.topic,
           share_url:allValue.share_url,
@@ -54,7 +65,8 @@ export class VideosComponent implements OnInit {
         }))
       ).subscribe(
       data => {
-        this.values = data
+        this.values = data;
+        this.showSpinner = false;
       }
     );
     

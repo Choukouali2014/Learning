@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgbSlideEvent, NgbCarousel, NgbModal, NgbSlideEventSource, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from './core/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,12 @@ import { NgbSlideEvent, NgbCarousel, NgbModal, NgbSlideEventSource, NgbActiveMod
 })
 export class AppComponent {
   title = 'learning';
+  user : any;
+  constructor(private auth: AuthService){
+    this.auth.user.subscribe(userData =>{
+      this.user = userData;
+    });
+  }
 
   images = [1, 2, 3, 4, 5, 6, 7].map(() => `https://picsum.photos/1349/500?random&t=${Math.random()}`);
   paused = false;
