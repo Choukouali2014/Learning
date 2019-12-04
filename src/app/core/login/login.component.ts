@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.signIn = this.fb.group({
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required,Validators.email]],
       password: ['', [Validators.required]],
     });
   }
@@ -38,15 +38,16 @@ export class LoginComponent implements OnInit {
     const result =  this.auth.signIn(this.signIn.value.email, this.signIn.value.password);
     result.then(
       (result) => {
-        // if (result.user.emailVerified === false) {
-        //   this.sendVerificationEmail();
-        //   //redirect to a message check your email 
-        // }else{
-        //   //  this.updateUserData(result.user,'');
-        //   this.router.navigate(['/course']);
-        // }
-        this.message = false;
-        this.router.navigate(['/home']);
+        if (result.user.emailVerified === false) {
+          this.auth.sendVerificationEmail();
+          //redirect to a message check your email 
+        }else{
+          this.message = false;
+          this.router.navigate(['/home']);
+        }
+        console.log("here we go");
+        this.auth.updateVerifEmail(result.user);
+        
       }).catch((error) => {
         this.message = true;
         this.errors = error.message;

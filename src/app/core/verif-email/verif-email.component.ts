@@ -11,7 +11,7 @@ export class VerifEmailComponent implements OnInit {
   constructor(private auth:AuthService) { }
 
   ngOnInit() {
-    this.auth.user.subscribe(userData => {this.email = userData.email; console.log(userData)});
+    this.auth.user.subscribe(userData => {this.email = userData['email'];});
   }
 
 }

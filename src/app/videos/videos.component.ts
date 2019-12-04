@@ -55,21 +55,26 @@ export class VideosComponent implements OnInit {
    }
 
   ngOnInit() {
-    //let term = this.route.snapshot.paramMap.get('id');
-    this.videoService.getVideos().pipe(
-        map(list => list.filter(lists => lists.topic.toLowerCase().indexOf(this.term) !== -1)),
-        map( mapValue => mapValue.map(allValue => this.videosV={
-          topic: allValue.topic,
-          share_url:allValue.share_url,
-          start_time: allValue.start_time.substring(0,10)
-        }))
-      ).subscribe(
-      data => {
-        this.values = data;
-        this.showSpinner = false;
-      }
-    );
+    if(this.auth.emailVerified === false){
+      this.auth.signOut();
+    }else{
+
+      //let term = this.route.snapshot.paramMap.get('id');
+      this.videoService.getVideos().pipe(
+          map(list => list.filter(lists => lists.topic.toLowerCase().indexOf(this.term) !== -1)),
+          map( mapValue => mapValue.map(allValue => this.videosV={
+            topic: allValue.topic,
+            share_url:allValue.share_url,
+            start_time: allValue.start_time.substring(0,10)
+          }))
+        ).subscribe(
+        data => {
+          this.values = data;
+          this.showSpinner = false;
+        }
     
+    );
+      }
   }
 
  openXl(content) {

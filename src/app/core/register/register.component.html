@@ -15,7 +15,7 @@
                             <label for="inputUsername">Username</label>
                             <div class="form-group">
                                 <input type="text" id="inputUsername" (blur)="ShowErrors()" class="form-control"
-                                    formControlName="username">
+                                    formControlName="displayName">
                                 <span class="form-text   alert-danger" *ngIf="formErrors.username">
                                     {{formErrors.username }}
                                 </span>

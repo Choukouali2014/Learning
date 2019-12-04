@@ -14,6 +14,17 @@ import { Router } from '@angular/router';
 export class AuthService {
   user: Observable<User>;
   errors;
+  emptyUser:User={
+    uid: '',
+    email: '',
+    photoURL: '',
+    session: 0,
+    course: '',
+    displayName: '',
+    favoriteColor: '',
+    password: '',
+    emailVerified: false
+  } 
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore, private router: Router) {
     this.user = this.afAuth.authState
@@ -25,10 +36,11 @@ export class AuthService {
       );
   }
 
-  signUp(email) { 
+  verifIfEmailExist(email) { 
    return this.afs.collection('users',ref=>ref.where('email','==',email)).valueChanges();
-   
   }
+
+
 
   loginWithEmail(email, password){
    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
@@ -36,7 +48,6 @@ export class AuthService {
 
 
   sendVerificationEmail() {
-    
     return this.afAuth.auth.currentUser.sendEmailVerification().
     then(() => {
       this.router.navigate(['/auth/verif-email']);
@@ -62,17 +73,28 @@ export class AuthService {
   get emailVerified(): boolean {
     return this.afAuth.auth.currentUser.emailVerified;
   }
-  public updateUserData(user, formValues: any) {
+  public updateVerifEmail(user){
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const data: User = {
+    let data ={
+      emailVerified: user.emailVerified
+    };
+    
+    return userRef.set(data, { merge: true });
+  }
+  public updateUserData(user, formValues?:any ) {
+    console.log(user);
+    console.log(formValues);
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    let data: User = {
       uid: user.uid,
       email: user.email,
-      displayName: !!user.displayName ? user.displayName : formValues.username,
+      displayName: !!user.displayName ? user.displayName : formValues.displayName,
       session: 1,
       course: !!user.course ? user.course : formValues.course,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified
     };
+    
     return userRef.set(data, { merge: true });
   }
 

@@ -16,7 +16,7 @@ export const validationMessage = {
   },
   email : {
     required : 'Email is required.',
-    pattern : 'Email Domain should be example@hcl.com.',
+    pattern : 'Email Domain should be example@gmail.com.',
     emailDomain: 'Email Domain should be example@hcl.com',
     email: 'Email must be a valid email address'
   },
